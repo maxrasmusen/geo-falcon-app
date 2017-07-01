@@ -1,6 +1,7 @@
 import falcon
 import xml.etree.ElementTree as et
 import re
+import json
 
 def get_notes(device_name):
     # Parse xml from file and find 'devices tag'
@@ -34,7 +35,7 @@ class DevicesResource(object):
       
       if notes: 
         res.status = falcon.HTTP_200
-        res.body = (notes)
+        res.body = json.dumps({"notes": notes})
       else: 
         res.status = falcon.HTTP_404
         res.body = "That device cannot be found"

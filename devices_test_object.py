@@ -1,4 +1,5 @@
 import httplib 
+import json
 
 class DevicesRequestWrapper:
 
@@ -7,7 +8,8 @@ class DevicesRequestWrapper:
 
   def get_single_device_body(self, device_name):
     self.conn.request("GET", "/devices", "", {"device_name": device_name})
-    return self.conn.getresponse().read()
+    body = self.conn.getresponse().read()
+    return json.loads(body)["notes"]
 
   def get_single_device_status(self, device_name):
     self.conn.request("GET", "/devices", "", {"device_name": device_name})
