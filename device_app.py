@@ -21,11 +21,8 @@ class DevicesResource(object):
         res.status = falcon.HTTP_404
         res.body = "That device cannot be found"
 
-    def get_all_devices(self, req, res):
-      minischema = et.parse('mini-schema.xml')
-      devices = minischema.getroot().find('devices')      
+    def get_all_devices(self, req, res):   
       all_devices = self.xml_reader.get_all_devices()
-      
       res.status = falcon.HTTP_200
       res.body = json.dumps(all_devices)
 

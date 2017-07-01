@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as et
 import re
 
+# Class to read data from the xml file. Basically the devices model
 class XMLReader():
 
   def __init__(self):
