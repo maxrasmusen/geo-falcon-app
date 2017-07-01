@@ -16,6 +16,11 @@ class TestDevicesResponse(unittest.TestCase):
   def test_response_when_does_not_exist(self):
     self.assertEqual(self.devices_request.get_single_device_status('i don\'t exist'), 404)
 
+  def test_create_single_device(self):
+    response = self.devices_request.create_single_device('test_device', 'a cool description')
+    self.assertEqual(response["name"], "test_device")
+    self.assertEqual(response["notes"], "a cool description")
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestDevicesResponse)
 colour_runner.runner.ColourTextTestRunner().run(suite)

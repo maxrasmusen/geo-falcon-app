@@ -14,3 +14,12 @@ class DevicesRequestWrapper:
   def get_single_device_status(self, device_name):
     self.conn.request("GET", "/devices", "", {"device_name": device_name})
     return self.conn.getresponse().status
+
+  def create_single_device(self, name, notes):
+    body = json.dumps({
+      "name": name,
+      "notes": notes
+      })
+
+    self.conn.request("POST", "/devices", body)
+    return json.loads(self.conn.getresponse().read())
