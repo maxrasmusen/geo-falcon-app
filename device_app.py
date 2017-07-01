@@ -6,12 +6,14 @@ def get_notes(device_name):
     devices = et.parse('mini-schema.xml')
     devices = devices.getroot().find('devices')
 
-    # Iterate through all devices
+    # Iterate through all devices. Return the notes if names match
     for device in devices.findall('device'):
       d = device.find('name').text
       if d == device_name:
         return device.find('notes').text
 
+    # If we get here none have matched. 
+    return False
 
 class DevicesResource(object): 
 
@@ -23,8 +25,12 @@ class DevicesResource(object):
       
       notes = get_notes(device_name)
       
-      res.status = falcon.HTTP_200
-      res.body = (notes)
+      if notes: 
+        res.status = falcon.HTTP_200
+        res.body = (notes)
+      else: 
+        res.status = falcon.HTTP_404
+        res.body = "That device cannot be found"
 
 # Start falcon server
 app = falcon.API()
