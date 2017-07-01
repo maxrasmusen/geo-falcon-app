@@ -39,7 +39,7 @@ class DevicesResource(object):
       else: 
         res.status = falcon.HTTP_404
         res.body = "That device cannot be found"
-
+    
 # Start falcon server
 app = falcon.API()
 

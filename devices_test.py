@@ -17,9 +17,12 @@ class TestDevicesResponse(unittest.TestCase):
     self.assertEqual(self.devices_request.get_single_device_status('i don\'t exist'), 404)
 
   def test_create_single_device(self):
-    response = self.devices_request.create_single_device('test_device', 'a cool description')
+    response = self.devices_request.create_single_device_body('test_device', 'a cool description')
     self.assertEqual(response["name"], "test_device")
     self.assertEqual(response["notes"], "a cool description")
+
+  def test_create_bad_request(self):
+    self.assertEqual(self.devices_request.create_single_device_status_bad(), 400)
 
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestDevicesResponse)
