@@ -1,5 +1,6 @@
 import falcon
 import xml.etree.ElementTree as et
+import re
 
 def get_notes(device_name):
     # Parse xml from file and find 'devices tag'
@@ -10,7 +11,11 @@ def get_notes(device_name):
     for device in devices.findall('device'):
       d = device.find('name').text
       if d == device_name:
-        return device.find('notes').text
+        notes = device.find('notes').text
+        notes = re.sub(r'[\t\r]', r'', notes)
+        notes = re.sub(r'\n', r' ', notes)
+        notes = notes.strip()
+        return notes
 
     # If we get here none have matched. 
     return False
@@ -21,7 +26,7 @@ class DevicesResource(object):
 
       # Get device name stored in request head. 
       device_name = req.headers['DEVICE-NAME']
-      print device_name
+      # print device_name
       
       notes = get_notes(device_name)
       

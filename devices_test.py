@@ -8,7 +8,6 @@ class TestDevicesResponse(unittest.TestCase):
     self.devices_request = dto.DevicesRequestWrapper()
 
   def test_response_when_single_line(self):
-    
     self.assertEqual(self.devices_request.get_single_device_body('ct'), 'Legacy Legato CT transmitter')
     
   def test_response_when_multi_line(self):
