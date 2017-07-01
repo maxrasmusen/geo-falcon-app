@@ -24,6 +24,17 @@ class TestDevicesResponse(unittest.TestCase):
   def test_create_bad_request(self):
     self.assertEqual(self.devices_request.create_single_device_status_bad(), 400)
 
+  def test_get_all_devices_length(self):
+    self.assertEqual(len(self.devices_request.get_all_devices()), 31)
+
+  # Just check the first device to see if it contains the right information
+  def test_get_all_devices_content(self):
+    hub_ethernet_cosy = self.devices_request.get_all_devices()[0]
+    self.assertEqual(hub_ethernet_cosy["name"], "hub_ethernet_cosy")
+    self.assertEqual(hub_ethernet_cosy["value"], "0")
+    self.assertEqual(hub_ethernet_cosy["notes"], "Cosy hub, Ethernet microcontroller")
+
+
 
 suite = unittest.TestLoader().loadTestsFromTestCase(TestDevicesResponse)
 colour_runner.runner.ColourTextTestRunner().run(suite)

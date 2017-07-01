@@ -32,3 +32,8 @@ class DevicesRequestWrapper:
 
     self.conn.request("POST", "/devices", body)
     return self.conn.getresponse().status
+
+  def get_all_devices(self):
+    self.conn.request("GET", "/devices")
+    body = self.conn.getresponse().read()
+    return json.loads(body)
