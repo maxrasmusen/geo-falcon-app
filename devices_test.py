@@ -8,7 +8,7 @@ class TestDevicesResponse(unittest.TestCase):
     self.devices_request = dto.DevicesRequestWrapper()
 
   def test_response_when_single_line(self):
-    self.assertEqual(self.devices_request.get_single_device_body('ct'), 'Legacy Legato CT transmitter')
+    self.assertEqual(self.devices_request.get_single_device_body('ct')["notes"], 'Legacy Legato CT transmitter')
     
   def test_response_when_multi_line(self):
     self.assertEqual(self.devices_request.get_single_device_body('hub_ethernet_cosy_generic'), "Generic hub to connect to Cosy servers and perform fast firmware download. Used to deploy hub firmware at the point of installation.")
@@ -18,8 +18,10 @@ class TestDevicesResponse(unittest.TestCase):
 
   def test_create_single_device(self):
     response = self.devices_request.create_single_device_body('test_device', 'a cool description')
-    self.assertEqual(response["name"], "test_device")
-    self.assertEqual(response["notes"], "a cool description")
+    self.assertNotEqual(response, "INVALID JSON")
+    if response != "INVALID JSON":
+      self.assertEqual(response["name"], "test_device")
+      self.assertEqual(response["notes"], "a cool description")
 
   def test_create_bad_request(self):
     self.assertEqual(self.devices_request.create_single_device_status_bad(), 400)
