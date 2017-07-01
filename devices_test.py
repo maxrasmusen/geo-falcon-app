@@ -1,5 +1,6 @@
 import devices_test_object as dto
 import unittest
+import colour_runner.runner
 
 class TestDevicesResponse(unittest.TestCase):
  
@@ -8,6 +9,6 @@ class TestDevicesResponse(unittest.TestCase):
     self.assertEqual(devices_request.getsingledevice('ct'), 'Legacy Legato CT transmitter')
     
     
-
-unittest.main()
+suite = unittest.TestLoader().loadTestsFromTestCase(TestDevicesResponse)
+colour_runner.runner.ColourTextTestRunner().run(suite)
 
