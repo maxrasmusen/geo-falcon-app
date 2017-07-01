@@ -21,6 +21,15 @@ class XMLReader():
       # If we get here none have matched. 
       return False
 
+  def get_all_devices(self):
+    all_devices = []
+    for device in self.devices.findall('device'):
+      name = device.find('name').text
+      value = device.find('value').text
+      notes = self.strip_whitespace(device.find('notes').text)
+      dict = {'name': name, 'value': value, 'notes': notes}
+      all_devices.append(dict)
+    return all_devices
 
   def strip_whitespace(self, notes):
     

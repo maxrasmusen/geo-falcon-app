@@ -1,13 +1,13 @@
 import falcon
 import json
-import xml_reader as x
+import xml_reader
 import xml.etree.ElementTree as et
 import re
 
 class DevicesResource(object): 
 
     def __init__(self):
-      self.xml_reader = x.XMLReader()
+      self.xml_reader = xml_reader.XMLReader()
 
     def get_single_device(self, req, res):
       device_name = req.headers['DEVICE-NAME']
@@ -23,16 +23,9 @@ class DevicesResource(object):
 
     def get_all_devices(self, req, res):
       minischema = et.parse('mini-schema.xml')
-      devices = minischema.getroot().find('devices')
-      all_devices = []
-      for device in devices.findall('device'):
-        name = device.find('name').text
-        value = device.find('value').text
-        notes = self.xml_reader.strip_whitespace(device.find('notes').text)
-        dict = {'name': name, 'value': value, 'notes': notes}
-        print(dict)
-        all_devices.append(dict)
-
+      devices = minischema.getroot().find('devices')      
+      all_devices = self.xml_reader.get_all_devices()
+      
       res.status = falcon.HTTP_200
       res.body = json.dumps(all_devices)
 
