@@ -6,33 +6,33 @@ import re
 
 class DevicesResource(object): 
 
-    def __init__(self):
-      self.xml_reader = xml_reader.XMLReader()
+  def __init__(self):
+    self.xml_reader = xml_reader.XMLReader()
 
-    def get_single_device(self, req, res):
-      device_name = req.headers['DEVICE-NAME']
-        
-      notes = self.xml_reader.get_single_device_notes(device_name)
+  def get_single_device(self, req, res):
+    device_name = req.headers['DEVICE-NAME']
       
-      if notes: 
-        res.status = falcon.HTTP_200
-        res.body = json.dumps({"name": device_name, "notes": notes})
-      else: 
-        res.status = falcon.HTTP_404
-        res.body = "That device cannot be found"
-
-    def get_all_devices(self, req, res):   
-      all_devices = self.xml_reader.get_all_devices()
+    device = self.xml_reader.get_single_device_notes(device_name)
+    
+    if device: 
       res.status = falcon.HTTP_200
-      res.body = json.dumps(all_devices)
+      res.body = json.dumps(device)
+    else: 
+      res.status = falcon.HTTP_404
+      res.body = "That device cannot be found"
 
-    def on_get(self, req, res): 
+  def get_all_devices(self, req, res):   
+    all_devices = self.xml_reader.get_all_devices()
+    res.status = falcon.HTTP_200
+    res.body = json.dumps(all_devices)
 
-      # Get device name stored in request head. 
-      if 'DEVICE-NAME' in req.headers:
-        self.get_single_device(req, res)
-      else:
-        self.get_all_devices(req, res)
+  def on_get(self, req, res): 
+
+    # Check if request is for single device or all devices
+    if 'DEVICE-NAME' in req.headers:
+      self.get_single_device(req, res)
+    else: 
+      self.get_all_devices(req, res)
 
 # Start falcon server
 app = falcon.API()

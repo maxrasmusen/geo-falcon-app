@@ -14,10 +14,16 @@ class XMLReader():
       for device in self.devices.findall('device'):
         d = device.find('name').text
         if d == device_name:
+
+          value = device.find('value').text
           notes = device.find('notes').text
+
           # Remove tabs, CRs and newlines from notes, replacing newlines with spaces. Remove extra whitespace around edge.
           notes = self.strip_whitespace(notes)
-          return notes
+
+          # Return a json string with the device informtion
+          return {"name": device_name, "value": value, "notes": notes}
+          
 
       # If we get here none have matched. 
       return False
