@@ -8,20 +8,23 @@ class TestDevicesResponse(unittest.TestCase):
     self.devices_request = dto.DevicesRequestWrapper()
 
   def test_response_when_single_line(self):
-    self.assertEqual(self.devices_request.get_single_device_body('ct')["notes"], 'Legacy Legato CT transmitter')
+    response = self.devices_request.get_single_device_body('ct')
+    self.assertTrue("name" in response and "notes" in response)
+    self.assertEqual(response["notes"], 'Legacy Legato CT transmitter')
     
   def test_response_when_multi_line(self):
-    self.assertEqual(self.devices_request.get_single_device_body('hub_ethernet_cosy_generic'), "Generic hub to connect to Cosy servers and perform fast firmware download. Used to deploy hub firmware at the point of installation.")
+    response = self.devices_request.get_single_device_body('hub_ethernet_cosy_generic')
+    self.assertTrue("name" in response and "notes" in response)
+    self.assertEqual(response["notes"], "Generic hub to connect to Cosy servers and perform fast firmware download. Used to deploy hub firmware at the point of installation.")
 
   def test_response_when_does_not_exist(self):
     self.assertEqual(self.devices_request.get_single_device_status('i don\'t exist'), 404)
 
   def test_create_single_device(self):
     response = self.devices_request.create_single_device_body('test_device', 'a cool description')
-    self.assertNotEqual(response, "INVALID JSON")
-    if response != "INVALID JSON":
-      self.assertEqual(response["name"], "test_device")
-      self.assertEqual(response["notes"], "a cool description")
+    self.assertTrue("name" in response and "notes" in response)
+    self.assertEqual(response["name"], "test_device")
+    self.assertEqual(response["notes"], "a cool description")
 
   def test_create_bad_request(self):
     self.assertEqual(self.devices_request.create_single_device_status_bad(), 400)
@@ -32,6 +35,10 @@ class TestDevicesResponse(unittest.TestCase):
   # Just check the first device to see if it contains the right information
   def test_get_all_devices_content(self):
     hub_ethernet_cosy = self.devices_request.get_all_devices()[0]
+    self.assertTrue("name" in hub_ethernet_cosy 
+      and "notes" in hub_ethernet_cosy 
+      and "value" in hub_ethernet_cosy)
+    
     self.assertEqual(hub_ethernet_cosy["name"], "hub_ethernet_cosy")
     self.assertEqual(hub_ethernet_cosy["value"], "0")
     self.assertEqual(hub_ethernet_cosy["notes"], "Cosy hub, Ethernet microcontroller")

@@ -42,4 +42,4 @@ class DevicesRequestWrapper:
     try:
       return json.loads(js)
     except ValueError, e:
-      return "INVALID JSON"
+      return {}
